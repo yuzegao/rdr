@@ -31,6 +31,7 @@ type Entry struct {
 	NumOfElem          uint64
 	LenOfLargestElem   uint64
 	FieldOfLargestElem string
+	Expiry             int64
 }
 
 // Decoder decode rdb file
@@ -41,7 +42,7 @@ type Decoder struct {
 	usedMem int64
 	ctime   int64
 	count   int
-	rdbVer int
+	rdbVer  int
 
 	currentInfo  *rdb.Info
 	currentEntry *Entry
@@ -97,7 +98,7 @@ func (d *Decoder) Aux(key, value []byte) {
 	}
 }
 
-func (d *Decoder) StartStream(key []byte, cardinality, expiry int64, info *rdb.Info) {
+func (d *Decoder) StartStrzeam(key []byte, cardinality, expiry int64, info *rdb.Info) {
 	keyStr := string(key)
 	bytes := d.m.TopLevelObjOverhead(key, expiry)
 	bytes += d.m.StreamOverhead()
@@ -248,6 +249,7 @@ func (d *Decoder) StartList(key []byte, length, expiry int64, info *rdb.Info) {
 		Bytes:     bytes,
 		Type:      "list",
 		NumOfElem: 0,
+		Expiry:    expiry,
 	}
 }
 

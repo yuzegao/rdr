@@ -43,6 +43,7 @@ func NewCounter() *Counter {
 		keyPrefixNum:       map[typeKey]uint64{},
 		typeBytes:          map[string]uint64{},
 		typeNum:            map[string]uint64{},
+		typeExpired:        map[string]uint64{},
 		separators:         ":;,_- ",
 		slotBytes:          map[int]uint64{},
 		slotNum:            map[int]uint64{},
@@ -65,6 +66,7 @@ type Counter struct {
 	separators         string
 	typeBytes          map[string]uint64
 	typeNum            map[string]uint64
+	typeExpired        map[string]uint64
 	slotBytes          map[int]uint64
 	slotNum            map[int]uint64
 }
@@ -172,6 +174,9 @@ func (c *Counter) countByLength(e *decoder.Entry) {
 func (c *Counter) countByType(e *decoder.Entry) {
 	c.typeNum[e.Type]++
 	c.typeBytes[e.Type] += e.Bytes
+	if e.Expiry > 0 {
+		c.typeExpired[e.Type]++
+	}
 }
 
 func (c *Counter) countByKeyPrefix(e *decoder.Entry) {

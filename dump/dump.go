@@ -100,6 +100,7 @@ func getData(filename string, cnt *Counter) map[string]interface{} {
 
 	data["TypeBytes"] = cnt.typeBytes
 	data["TypeNum"] = cnt.typeNum
+	data["TypeExpired"] = cnt.typeExpired
 	totalNum := uint64(0)
 	for _, v := range cnt.typeNum {
 		totalNum += v
@@ -108,8 +109,8 @@ func getData(filename string, cnt *Counter) map[string]interface{} {
 	for _, v := range cnt.typeBytes {
 		totalBytes += v
 	}
-	data["TotleNum"] = totalNum
-	data["TotleBytes"] = totalBytes
+	data["TotalNum"] = totalNum
+	data["TotalBytes"] = totalBytes
 
 	lenLevelCount := map[string][]*PrefixEntry{}
 	for _, entry := range cnt.GetLenLevelCount() {
